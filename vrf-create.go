@@ -4,32 +4,27 @@ import (
 	"fmt"
 	"github.com/btcsuite/btcutil/base58"
 	"github.com/google/keytransparency/core/crypto/vrf/p256"
+	_ "github.com/tolsi/vrf-lottery/tools"
 	"io/ioutil"
 	"math/big"
 	"os"
 	"strconv"
 )
 
-func panicIfError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 // openssl ecparam -name prime256v1 -genkey -out p256-key.pem -noout
 // openssl ec -in p256-key.pem -pubout -out p256-pubkey.pem
 func main() {
 	m, err := ioutil.ReadFile(os.Args[1])
-	panicIfError(err)
+	PanicIfError(err)
 	skb, err := ioutil.ReadFile(os.Args[2])
 
-	panicIfError(err)
+	PanicIfError(err)
 	modulo, err := strconv.ParseInt(os.Args[3], 10, 64)
-	panicIfError(err)
+	PanicIfError(err)
 	signer, err := p256.NewVRFSignerFromPEM(skb)
-	panicIfError(err)
+	PanicIfError(err)
 	index1b, proof := signer.Evaluate(m)
-	panicIfError(err)
+	PanicIfError(err)
 
 	////region Verify proof
 	//index2b, err := verifier.ProofToHash(m, proof)

@@ -2,46 +2,38 @@ package main
 
 import (
 	"fmt"
-	"github.com/btcsuite/btcutil/base58"
-	"github.com/google/keytransparency/core/crypto/vrf/p256"
 	"io/ioutil"
 	"math/big"
 	"os"
 	"strconv"
-	"tools"
+
+	"github.com/btcsuite/btcutil/base58"
+	"github.com/google/keytransparency/core/crypto/vrf/p256"
+	_ "github.com/tolsi/vrf-lottery/tools"
 )
 
 func main() {
 	//region Read params
 
 	m, err := ioutil.ReadFile(os.Args[1])
-	if err != nil {
-		panic(err)
-	}
+	PanicIfError(err)
 
 	proofString := os.Args[2]
 	proof := base58.Decode(proofString)
 
 	pkb, err := ioutil.ReadFile(os.Args[3])
-	if err != nil {
-		panic(err)
-	}
+	PanicIfError(err)
 	modulo, err := strconv.ParseInt(os.Args[4], 10, 64)
-	panicIfError(err)
+	PanicIfError(err)
 
 	//endregion
 
 	//region Verify proof
 
 	verifier, err := p256.NewVRFVerifierFromPEM(pkb)
-	if err != nil {
-		panic(err)
-	}
+	PanicIfError(err)
 	index2b, err := verifier.ProofToHash(m, proof)
-	if err != nil {
-		fmt.Print("Evaluated proof isn't valid\n")
-		os.Exit(1)
-	}
+	PanicIfError(err)
 
 	//endregion
 
