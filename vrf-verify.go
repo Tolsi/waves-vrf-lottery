@@ -9,31 +9,31 @@ import (
 
 	"github.com/btcsuite/btcutil/base58"
 	"github.com/google/keytransparency/core/crypto/vrf/p256"
-	_ "github.com/tolsi/vrf-lottery/tools"
+	"github.com/tolsi/vrf-lottery/tools"
 )
 
 func main() {
 	//region Read params
 
 	m, err := ioutil.ReadFile(os.Args[1])
-	PanicIfError(err)
+	tools.PanicIfError(err)
 
 	proofString := os.Args[2]
 	proof := base58.Decode(proofString)
 
 	pkb, err := ioutil.ReadFile(os.Args[3])
-	PanicIfError(err)
+	tools.PanicIfError(err)
 	modulo, err := strconv.ParseInt(os.Args[4], 10, 64)
-	PanicIfError(err)
+	tools.PanicIfError(err)
 
 	//endregion
 
 	//region Verify proof
 
 	verifier, err := p256.NewVRFVerifierFromPEM(pkb)
-	PanicIfError(err)
+	tools.PanicIfError(err)
 	index2b, err := verifier.ProofToHash(m, proof)
-	PanicIfError(err)
+	tools.PanicIfError(err)
 
 	//endregion
 

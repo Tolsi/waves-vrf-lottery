@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/btcsuite/btcutil/base58"
 	"github.com/google/keytransparency/core/crypto/vrf/p256"
-	_ "github.com/tolsi/vrf-lottery/tools"
+	"github.com/tolsi/vrf-lottery/tools"
 	"io/ioutil"
 	"math/big"
 	"os"
@@ -15,16 +15,16 @@ import (
 // openssl ec -in p256-key.pem -pubout -out p256-pubkey.pem
 func main() {
 	m, err := ioutil.ReadFile(os.Args[1])
-	PanicIfError(err)
+	tools.PanicIfError(err)
 	skb, err := ioutil.ReadFile(os.Args[2])
 
-	PanicIfError(err)
+	tools.PanicIfError(err)
 	modulo, err := strconv.ParseInt(os.Args[3], 10, 64)
-	PanicIfError(err)
+	tools.PanicIfError(err)
 	signer, err := p256.NewVRFSignerFromPEM(skb)
-	PanicIfError(err)
+	tools.PanicIfError(err)
 	index1b, proof := signer.Evaluate(m)
-	PanicIfError(err)
+	tools.PanicIfError(err)
 
 	////region Verify proof
 	//index2b, err := verifier.ProofToHash(m, proof)
