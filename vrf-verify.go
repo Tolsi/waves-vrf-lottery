@@ -16,24 +16,24 @@ func main() {
 	//region Read params
 
 	m, err := ioutil.ReadFile(os.Args[1])
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 
 	proofString := os.Args[2]
 	proof := base58.Decode(proofString)
 
 	pkb, err := ioutil.ReadFile(os.Args[3])
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 	modulo, err := strconv.ParseInt(os.Args[4], 10, 64)
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 
 	//endregion
 
 	//region Verify proof
 
 	verifier, err := p256.NewVRFVerifierFromPEM(pkb)
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 	index2b, err := verifier.ProofToHash(m, proof)
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 
 	//endregion
 

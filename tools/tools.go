@@ -1,7 +1,10 @@
 package tools
 
-func PanicIfError(err error) {
+import "os"
+
+func PrintErrorAndExit(err error) {
 	if err != nil {
-		panic(err)
+		println(err.Error())
+		os.Exit(1)
 	}
 }

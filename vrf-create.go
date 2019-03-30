@@ -15,16 +15,16 @@ import (
 // openssl ec -in p256-key.pem -pubout -out p256-pubkey.pem
 func main() {
 	m, err := ioutil.ReadFile(os.Args[1])
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 	skb, err := ioutil.ReadFile(os.Args[2])
 
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 	modulo, err := strconv.ParseInt(os.Args[3], 10, 64)
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 	signer, err := p256.NewVRFSignerFromPEM(skb)
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 	index1b, proof := signer.Evaluate(m)
-	tools.PanicIfError(err)
+	tools.PrintErrorAndExit(err)
 
 	////region Verify proof
 	//index2b, err := verifier.ProofToHash(m, proof)
