@@ -14,9 +14,6 @@ import (
 	"strings"
 )
 
-var origin = "https://twren.ch"
-var url = "wss://twren.ch/socket.io/?EIO=3&transport=websocket&sid=%s"
-
 type SessionStartJSONResponce struct {
 	Sid string `json:"sid"`
 }
@@ -83,7 +80,7 @@ func receiveMessage(ws *websocket.Conn) string {
 
 func main() {
 	session := createSession()
-	config, _ := websocket.NewConfig(fmt.Sprintf(url, session.Sid), origin)
+	config, _ := websocket.NewConfig(fmt.Sprintf("wss://twren.ch/socket.io/?EIO=3&transport=websocket&sid=%s", session.Sid), "https://twren.ch")
 	config.TlsConfig = &tls.Config{
 		InsecureSkipVerify: true,
 		ServerName:         "twren.ch",
@@ -111,7 +108,7 @@ func main() {
 			}
 			res, _ := json.Marshal(users)
 			// print total participants in stderr
-			println(fmt.Sprintf("Total participants: %d", users.Cardinality()))
+			println(fmt.Sprintf("Total retweeters: %d", users.Cardinality()))
 			fmt.Printf("%s\n", res)
 			buffer.Reset()
 			ws.Close()
