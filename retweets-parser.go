@@ -100,19 +100,18 @@ func main() {
 	var buffer bytes.Buffer
 	for {
 		var msg = receiveMessage(ws)
-		if strings.Contains(msg, "\"success\"") {
+		if strings.Contains(msg, "Successfully") {
 			// process final json
 			arr := *new([]RetweetsResultObject)
-			err := json.Unmarshal(buffer.Bytes(), &arr)
-			if err != nil {
-				log.Fatal(err)
-			}
+			json.Unmarshal(buffer.Bytes(), &arr)
 			result := arr[1]
 			users := mapset.NewSet()
 			for _, retweet := range result.Retweets {
 				users.Add(retweet.ScreenName)
 			}
 			res, _ := json.Marshal(users)
+			// print total participants in stderr
+			println(fmt.Sprintf("Total participants: %d", users.Cardinality()))
 			fmt.Printf("%s\n", res)
 			buffer.Reset()
 			ws.Close()
