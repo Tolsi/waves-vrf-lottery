@@ -10,6 +10,6 @@ env GOOS=windows GOARCH=386 go build -o build/windows/vrf-create.exe vrf-create.
 env GOOS=windows GOARCH=386 go build -o build/windows/vrf-verify.exe vrf-verify.go
 env GOOS=windows GOARCH=386 go build -o build/windows/retweets-parser.exe retweets-parser.go
 
-zip release-mac-$(git describe --tags).zip build/mac/*
-zip release-linux-$(git describe --tags).zip build/linux/*
-zip release-windows-$(git describe --tags).zip build/windows/*
+zip build/release-mac-$(git describe --tags).zip build/mac/*
+zip build/release-linux-$(git describe --tags).zip build/linux/*
+zip build/release-windows-$(git describe --tags).zip build/windows/*
