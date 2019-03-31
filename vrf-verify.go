@@ -39,12 +39,8 @@ func main() {
 
 	//region Result output
 
-	//index1 := new(big.Int)
-	//index1.SetBytes(index1b[:])
 	index2 := new(big.Int)
 	index2.SetBytes(index2b[:])
-	//if bytes.Compare(index1b[:], index2b[:]) != 0 {
-	//	fmt.Print("Got different indexes after evaluate proof\n")
 
 	moduloResult := new(big.Int)
 	moduloBigint := new(big.Int)
