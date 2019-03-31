@@ -14,6 +14,8 @@ import (
 // openssl ecparam -name prime256v1 -genkey -out p256-key.pem -noout
 // openssl ec -in p256-key.pem -pubout -out p256-pubkey.pem
 func main() {
+	//region Read params
+
 	m, err := ioutil.ReadFile(os.Args[1])
 	tools.PrintErrorAndExit(err)
 	skb, err := ioutil.ReadFile(os.Args[2])
@@ -21,10 +23,17 @@ func main() {
 	tools.PrintErrorAndExit(err)
 	modulo, err := strconv.ParseInt(os.Args[3], 10, 64)
 	tools.PrintErrorAndExit(err)
+
+	//endregion
+
+	//region Create proofs
+
 	signer, err := p256.NewVRFSignerFromPEM(skb)
 	tools.PrintErrorAndExit(err)
 	index1b, proof := signer.Evaluate(m)
 	tools.PrintErrorAndExit(err)
+
+	//endregion
 
 	////region Verify proof
 	//index2b, err := verifier.ProofToHash(m, proof)
@@ -34,6 +43,7 @@ func main() {
 	////endregion
 
 	//region Result output
+
 	index1 := new(big.Int)
 	index1.SetBytes(index1b[:])
 	//index2 := new(big.Int)
@@ -51,4 +61,6 @@ func main() {
 	fmt.Printf("proof: %s\n", base58.Encode(proof))
 	fmt.Printf("index: %d\n", index1)
 	fmt.Printf("modulo: %d\n", moduloResult)
+
+	//endregion
 }
