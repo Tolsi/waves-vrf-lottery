@@ -107,8 +107,6 @@ func main() {
 				users.Add(retweet.ScreenName)
 			}
 			res, _ := json.Marshal(users)
-			// print total participants in stderr
-			println(fmt.Sprintf("Total retweeters: %d", users.Cardinality()))
 			fmt.Printf("%s\n", res)
 			buffer.Reset()
 			ws.Close()
