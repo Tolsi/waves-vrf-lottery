@@ -58,8 +58,8 @@ func main() {
 	moduloBigint.SetInt64(modulo)
 	moduloResult = moduloResult.Mod(index1, moduloBigint)
 
-	fmt.Printf("message: %s\n", string(m))
-	fmt.Printf("proof: %s\n", base58.Encode(proof))
+	fmt.Printf("message: '%s'\n", string(m))
+	fmt.Printf("proof (base58): '%s'\n", base58.Encode(proof))
 	fmt.Printf("index: %d\n", index1)
 	fmt.Printf("modulo: %d\n", moduloResult)
 
