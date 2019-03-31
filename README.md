@@ -1,6 +1,47 @@
+## VRF Lottery
 
-You need to install the dependencies: `openssl jq curl awk`. 
+This application uses VRF to confirm the randomness of various online lotteries.
+ 
+The unique provable random index created during the VRF scheme is used to select the winner. 
+The winner index is calculated as the remainder of dividing this index by the total number of participants.
+Now only tweeter support is made, but you can add any source of participants of the lottery in the future.
+
+# Installation
+
+Download the appropriate file for your platform from the Releases section (windows, mac os linux). 
+Now you need to install the dependencies: `openssl jq curl awk`. 
 You can do it using `install-dependencies.sh` script (call it with sudo, if needed).
+
+# Scheme of the lottery
+
+To start the lottery, you need to create a public and private keys, select the height of the Waves block in the future, the signature of which will participate in the lottery.
+In addition to the conditions for participation in the draw, you need to publicly declare the public key and the height that participants will use in the future for verification.
+At the time of summing up the results, the lottery organizer creates a list of participants, adds the block signature at a pre-selected height (saves it as a 'provable file'), selects the winner and creates a 'proof').
+When announcing the results, the organizer publishes the 'provable file' (list of participants and the block signature) and 'proof'. Using the public key published at the beginning of the lottery, 'provable file' and 'proof', anyone can check the winner, the presence of himself in the list of participants and the impartiality of the organizer.
+
+Since the lottery organizer cannot predict the block signature in the future, he cannot know in advance the pseudo-random value that will be involved in the lottery.
+Only the miner of the block in the future may in theory know his signature in advance, but he does not have the private key of the lottery organizer to manipulate it to win the contest, so he does not know how the signature affects the winner.
+
+# Description
+
+The package contains convenient scripts to select the winner and check the winner.
+
+Script `verify-winner.sh`:
+
+```Winner verify script.
+Usage: ./verify-winner.sh [provable file] [proof] [proving public key file]
+ Provable file should contains a json array of participants in the first line
+ Other lines may contain data unknown at the time of the beginning of the lottery, for example, the block signature from the future height.
+```
+Script `tweeter-pick-winner.sh`
+```Tweeter pick winner script.
+Usage: ./tweeter-pick-winner.sh [tweet id] [waves block height] [proving private key file]
+ Output 'participants_with_block_signature.txt' file will contains a json array of participants in the first line and the waves block signature from given height.
+ The block height for the competition and the public key must be available publicly before the competition begins.
+ The list of participants is fixed at the time of the drawing and together with the created proof and is a confirmation of the randomness of the lottery.
+ ```
+ 
+# Example
 
 ```
 $ unzip release-linux-*.zip -d vrf-lottery
