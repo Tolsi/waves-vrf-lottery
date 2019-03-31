@@ -1,3 +1,5 @@
+rm -rf build/
+
 env GOOS=darwin GOARCH=386 go build -o build/mac/vrf-proof vrf-proof.go
 env GOOS=darwin GOARCH=386 go build -o build/mac/vrf-verify vrf-verify.go
 env GOOS=darwin GOARCH=386 go build -o build/mac/retweets-parser retweets-parser.go
