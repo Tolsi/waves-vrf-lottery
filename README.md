@@ -41,21 +41,21 @@ Usage: ./tweeter-pick-winner.sh [tweet id] [waves block height] [proving private
  The list of participants is fixed at the time of the drawing and together with the created proof and is a confirmation of the randomness of the lottery.
  ```
 
-Also there're 3 native applications:
+Also there're 3 usefull native applications:
 
-App retweets-parser
+App `retweets-parser`
 ```
 Usage: ./retweets-parser [tweet_id]
  Output retweeters usernames of specified tweet.
 ```
 
-App vrf-prove
+App `vrf-prove`
 ```
 Usage: ./vrf-prove [provable file] [proving private key file] [number of participants]
  Output winner id (modulo), generate verifiable proof and other usefull info.
 ```
 
-App vrf-verify
+App `vrf-verify`
 ```
 Usage: ./vrf-verify [provable file] [proof] [proving public key file] [number of participants]
  Output winner id (modulo) and verify proof of it.
