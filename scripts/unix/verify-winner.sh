@@ -4,7 +4,7 @@ set -e
 
 if [[ $# -eq 0 ]] ; then
     echo 'Winner verify script.'
-    echo 'Usage: ./verify-winner.sh [provable file] [proof] [proving public key file]'
+    echo 'Usage: ./verify-winner.sh [provable file] [vrf bytes] [proof] [proving public key]'
     echo ' Provable file should contains a json array of participants in the first line'
     echo ' Other lines may contain data unknown at the time of the beginning of the lottery, for example, the block signature from the future height.'
     exit 0

@@ -4,7 +4,7 @@ set -e
 
 if [[ $# -eq 0 ]] ; then
     echo 'Tweeter pick winner script.'
-    echo 'Usage: ./tweeter-pick-winner.sh [tweet id] [waves block height] [proving private key file]'
+    echo 'Usage: ./tweeter-pick-winner.sh [tweet id] [waves block height] [proving private key]'
     echo " Output 'participants_with_block_signature.txt' file will contains a json array of participants in the first line and the waves block signature at given height."
     echo ' The block height for the competition and the public key must be available publicly before the competition begins.'
     echo ' The list of participants is fixed at the time of the drawing and together with the created proof and is a confirmation of the randomness of the lottery.'

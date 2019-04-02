@@ -1,6 +1,6 @@
 ## VRF Lottery
 
-This application uses [VRF](https://github.com/google/keytransparency/blob/master/core/crypto/vrf/p256/p256.go) to confirm the randomness of various online lotteries.
+This application uses [VRF](https://github.com/coniks-sys/coniks-go/blob/master/crypto/vrf/vrf.go) to confirm the randomness of various online lotteries.
  
 The unique provable random index created during the VRF scheme is used to select the winner. 
 The winner index is calculated as the remainder of dividing this index by the total number of participants.
