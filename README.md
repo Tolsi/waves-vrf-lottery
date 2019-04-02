@@ -8,9 +8,7 @@ Now only tweeter support is made, but you can add any source of participants of 
 
 # Installation
 
-Download the appropriate file for your platform from the Releases section (windows, mac os linux). 
-Now you need to install the dependencies: `openssl jq curl awk`. 
-You can do it using `install-dependencies.sh` script (call it with sudo, if needed).
+Download the appropriate file for your platform from the Releases section (windows, mac os linux).
 
 # Scheme of the lottery
 
@@ -24,41 +22,32 @@ Only the miner of the block in the future may in theory know his signature in ad
 
 # Description
 
-The package contains convenient scripts to select the winner and check the winner.
+The package contains convenient console apps to create keys, load the retweeters, select the winner and check the winner.
 
-Script `verify-winner.sh`:
+Also there're 4 usefull native applications:
 
-```Winner verify script.
-Usage: ./verify-winner.sh [provable file] [proof] [proving public key file]
- Provable file should contains a json array of participants in the first line
- Other lines may contain data unknown at the time of the beginning of the lottery, for example, the block signature from the future height.
+App `create-keys`
 ```
-Script `tweeter-pick-winner.sh`
-```Tweeter pick winner script.
-Usage: ./tweeter-pick-winner.sh [tweet id] [waves block height] [proving private key file]
- Output 'participants_with_block_signature.txt' file will contains a json array of participants in the first line and the waves block signature from given height.
- The block height for the competition and the public key must be available publicly before the competition begins.
- The list of participants is fixed at the time of the drawing and together with the created proof and is a confirmation of the randomness of the lottery.
- ```
-
-Also there're 3 usefull native applications:
+Usage: ./create-keys [seed phrase in quotes]
+ Output ed25519 private and public keys created from a passed seed phrase.
+```
 
 App `retweets-parser`
 ```
 Usage: ./retweets-parser [tweet_id]
- Output retweeters usernames of specified tweet.
+ Output retweeters usernames of specified tweet as json array.
 ```
 
-App `vrf-prove`
+App `pick-winner`
 ```
-Usage: ./vrf-prove [provable file] [proving private key file] [number of participants]
- Output winner id (modulo), generate verifiable proof and other usefull info.
+Usage: ./pick-winner [participants array file] [waves block height] [proving private key base58 bytes]
+ Output winner id (modulo), winner, generate verifiable proof and other usefull info.
 ```
 
-App `vrf-verify`
+App `verify-winner`
 ```
-Usage: ./vrf-verify [provable file] [proof] [proving public key file] [number of participants]
- Output winner id (modulo) and verify proof of it.
+Usage: ./verify-winner [provable file] [vrf base58 bytes] [proof base58 bytes] [proving public key file base58 bytes]
+ Output winner id (modulo), winner and verify proof of it.
 ```
  
 # Example
