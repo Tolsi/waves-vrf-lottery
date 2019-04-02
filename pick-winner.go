@@ -24,7 +24,7 @@ func main() {
 	blockHeight, err := strconv.ParseInt(os.Args[2], 10, 64)
 	tools.PrintErrorAndExit(err)
 
-	skb := vrf.PrivateKey(os.Args[3])
+	skb := vrf.PrivateKey(base58.Decode(os.Args[3]))
 	tools.PrintErrorAndExit(err)
 
 	//endregion
@@ -43,6 +43,12 @@ func main() {
 	tools.PrintErrorAndExit(err)
 
 	vrfBytes, proof := skb.Prove(provableMessage)
+	pk, _ := skb.Public()
+	verifyResult := pk.Verify(provableMessage, vrfBytes, proof)
+	if !verifyResult {
+		fmt.Printf("Proof verification was failed")
+		os.Exit(1)
+	}
 	tools.PrintErrorAndExit(err)
 
 	//endregion

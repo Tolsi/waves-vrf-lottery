@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/Tolsi/vrf-lottery/tools"
 	"github.com/btcsuite/btcutil/base58"
@@ -16,8 +17,11 @@ func main() {
 	//region Read params
 
 	participantsAndBlockSignature, err := ioutil.ReadFile(os.Args[1])
+	tools.PrintErrorAndExit(err)
 	s := strings.Split(string(participantsAndBlockSignature), "\n")
-	participants := s[0]
+	var participants []string
+	err = json.Unmarshal([]byte(s[0]), &participants)
+	tools.PrintErrorAndExit(err)
 	blockSignature := s[1]
 	tools.PrintErrorAndExit(err)
 
@@ -48,6 +52,7 @@ func main() {
 	verifyResult := pkb.Verify(participantsAndBlockSignature, vrfBytes, proofBytes)
 	if !verifyResult {
 		fmt.Printf("Proof verification was failed")
+		os.Exit(1)
 	}
 
 	//endregion
