@@ -3,14 +3,17 @@ rm -rf build/
 env GOOS=darwin GOARCH=386 go build -o build/mac/pick-winner pick-winner.go
 env GOOS=darwin GOARCH=386 go build -o build/mac/verify-winner verify-winner.go
 env GOOS=darwin GOARCH=386 go build -o build/mac/create-keys create-keys.go
+env GOOS=darwin GOARCH=386 go build -o build/mac/retweets-parser retweets-parser.go
 
 env GOOS=linux GOARCH=386 go build -o build/linux/pick-winner pick-winner.go
 env GOOS=linux GOARCH=386 go build -o build/linux/verify-winner verify-winner.go
 env GOOS=linux GOARCH=386 go build -o build/linux/create-keys create-keys.go
+env GOOS=linux GOARCH=386 go build -o build/linux/retweets-parser retweets-parser.go
 
 env GOOS=windows GOARCH=386 go build -o build/windows/pick-winner pick-winner.go
 env GOOS=windows GOARCH=386 go build -o build/windows/verify-winner verify-winner.go
 env GOOS=windows GOARCH=386 go build -o build/windows/create-keys create-keys.go
+env GOOS=windows GOARCH=386 go build -o build/windows/retweets-parser retweets-parser.go
 
 zip -j build/release-mac-$(git describe --tags).zip build/mac/*
 zip -j build/release-linux-$(git describe --tags).zip build/linux/*
