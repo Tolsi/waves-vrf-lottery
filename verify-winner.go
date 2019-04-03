@@ -51,7 +51,7 @@ func main() {
 
 	verifyResult := pkb.Verify(participantsAndBlockSignature, vrfBytes, proofBytes)
 	if !verifyResult {
-		fmt.Printf("Proof verification was failed")
+		fmt.Printf("Proof verification was failed\n")
 		os.Exit(1)
 	}
 
