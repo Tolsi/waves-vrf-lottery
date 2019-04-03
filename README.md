@@ -53,7 +53,7 @@ Usage: ./retweets-parser [tweet_id]
 App `outgoing-waves-tx-recipients`
 ```
 Usage: ./outgoing-waves-tx-recipients [address] [token id] [from ts]
- Output recipients of transfers (only type 4) from this address.
+ Output recipients of transfers (only type 4) from this address as json array.
 ```
  
 # Example
