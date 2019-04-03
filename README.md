@@ -22,20 +22,14 @@ Only the miner of the block in the future may in theory know his signature in ad
 
 # Description
 
-The package contains convenient console apps to create keys, load the retweeters, select the winner and check the winner.
+The package contains convenient console apps to create keys, load the participants lists, select the winner and check the winner.
 
-Also there're 4 usefull native applications:
+Also there're 5 useful native applications:
 
 App `create-keys`
 ```
 Usage: ./create-keys [seed phrase in quotes]
  Output ed25519 private and public keys created from a passed seed phrase.
-```
-
-App `retweets-parser`
-```
-Usage: ./retweets-parser [tweet_id]
- Output retweeters usernames of specified tweet as json array.
 ```
 
 App `pick-winner`
@@ -48,6 +42,18 @@ App `verify-winner`
 ```
 Usage: ./verify-winner [provable file] [vrf base58 bytes] [proof base58 bytes] [proving public key file base58 bytes]
  Output winner id (modulo), winner and verify proof of it.
+```
+
+App `retweets-parser`
+```
+Usage: ./retweets-parser [tweet_id]
+ Output retweeters usernames of specified tweet as json array.
+```
+
+App `outgoing-waves-tx-recipients`
+```
+Usage: ./outgoing-waves-tx-recipients [address] [token id] [from ts]
+ Output recipients of transfers (only type 4) from this address.
 ```
  
 # Example
