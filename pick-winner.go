@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/Tolsi/vrf-lottery/tools"
@@ -44,8 +45,8 @@ func main() {
 
 	vrfBytes, proof := skb.Prove(provableMessage)
 	pk, _ := skb.Public()
-	verifyResult := pk.Verify(provableMessage, vrfBytes, proof)
-	if !verifyResult {
+	verifyResult, vrfBytes2 := pk.Verify(provableMessage, proof)
+	if !verifyResult || bytes.Compare(vrfBytes, vrfBytes2) != 0 {
 		fmt.Printf("Proof verification was failed")
 		os.Exit(1)
 	}
