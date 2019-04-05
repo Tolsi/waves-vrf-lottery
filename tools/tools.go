@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"math/big"
+	"math/rand"
 	"net/http"
 	"os"
 )
@@ -39,4 +41,39 @@ func GetBlockSignature(blockNumber uint) (string, error) {
 		return signature, nil
 	}
 	return "", errors.New("wrong type")
+}
+
+func contains(s []int, e int) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+func pickUniqueIndexes(seed []byte, pickN int, maxValue int32) []int {
+	seedNumber := new(big.Int)
+	seedNumber.SetBytes(seed)
+	s := rand.NewSource(seedNumber.Int64())
+	r := rand.New(s)
+	indixes := make([]int, 0)
+	for len(indixes) < pickN {
+		index := int(r.Int31n(maxValue))
+		if contains(indixes, index) {
+			continue
+		} else {
+			indixes = append(indixes, index)
+		}
+	}
+	return indixes
+}
+
+func pickUniqueParticipants(seed []byte, pickN int, participants []string) []string {
+	winners := make([]string, 0)
+	indexes := pickUniqueIndexes(seed, pickN, int32(len(participants)))
+	for value, _ := range indexes {
+		winners = append(winners, participants[value])
+	}
+	return winners
 }
