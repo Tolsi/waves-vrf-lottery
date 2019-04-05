@@ -5,8 +5,8 @@ import (
 	"crypto/sha512"
 	"fmt"
 	"github.com/Tolsi/vrf-lottery/tools"
+	"github.com/Tolsi/vrf-lottery/vrf"
 	"github.com/btcsuite/btcutil/base58"
-	"github.com/coniks-sys/coniks-go/crypto/vrf"
 	"os"
 )
 
