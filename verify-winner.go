@@ -28,13 +28,10 @@ func main() {
 	blockHeight, err := strconv.ParseInt(os.Args[2], 10, 64)
 	tools.PrintErrorAndExit(err)
 
-	vrfString := os.Args[3]
-	vrfBytes := base58.Decode(vrfString)
-
-	proofString := os.Args[4]
+	proofString := os.Args[3]
 	proofBytes := base58.Decode(proofString)
 
-	pkb := vrf.PublicKey(base58.Decode(os.Args[5]))
+	pkb := vrf.PublicKey(base58.Decode(os.Args[4]))
 	tools.PrintErrorAndExit(err)
 
 	//endregion
@@ -49,7 +46,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	verifyResult := pkb.Verify(participantsAndBlockSignature, vrfBytes, proofBytes)
+	verifyResult, vrfBytes := pkb.Verify(participantsAndBlockSignature, proofBytes)
 	if !verifyResult {
 		fmt.Printf("Proof verification was failed\n")
 		os.Exit(1)
@@ -60,7 +57,7 @@ func main() {
 	//region Result output
 
 	vrfNumber := new(big.Int)
-	vrfNumber.SetBytes(vrfBytes[:])
+	vrfNumber.SetBytes(vrfBytes)
 
 	moduloBigint := big.NewInt(int64(len(participants)))
 	moduloResult := new(big.Int).Mod(vrfNumber, moduloBigint)

@@ -22,7 +22,8 @@ func TestHonestComplete(t *testing.T) {
 	// fmt.Printf("aliceVRF:     %X\n", aliceVRF)
 	// fmt.Printf("aliceProof:   %X\n", aliceProof)
 
-	if !pk.Verify(alice, aliceVRF, aliceProof) {
+	verifyResult, calculatedVRF := pk.Verify(alice, aliceProof)
+	if !verifyResult || bytes.Compare(aliceVRF, calculatedVRF) != 0 {
 		t.Error("Gen -> Compute -> Prove -> Verify -> FALSE")
 	}
 	if !bytes.Equal(aliceVRF, aliceVRFFromProof) {
@@ -57,7 +58,8 @@ func TestFlipBitForgery(t *testing.T) {
 			aliceVRF := sk.Compute(alice)
 			aliceVRF[i] ^= 1 << j
 			_, aliceProof := sk.Prove(alice)
-			if pk.Verify(alice, aliceVRF, aliceProof) {
+			verifyResult, _ := pk.Verify(alice, aliceProof)
+			if verifyResult {
 				t.Fatalf("forged by using aliceVRF[%d]^=%d:\n (sk=%x)", i, j, sk)
 			}
 		}
@@ -68,31 +70,37 @@ func sampleVectorTest(pk PublicKey, aliceVRF, aliceProof []byte, t *testing.T) {
 	alice := []byte{97, 108, 105, 99, 101}
 
 	// Positive test case
-	if !pk.Verify(alice, aliceVRF, aliceProof) {
+	verifyResult, _ := pk.Verify(alice, aliceProof)
+	if !verifyResult {
 		t.Error("TestSampleVectors HonestVector Failed")
 	}
 
 	// Negative test cases - try increment the first byte of every vector
 	pk[0]++
-	if pk.Verify(alice, aliceVRF, aliceProof) {
+	verifyResult, _ = pk.Verify(alice, aliceProof)
+	if !verifyResult {
 		t.Error("TestSampleVectors ForgedVector (pk modified) Passed")
 	}
 	pk[0]--
 
 	alice[0]++
-	if pk.Verify(alice, aliceVRF, aliceProof) {
+	verifyResult, _ = pk.Verify(alice, aliceProof)
+	if verifyResult {
 		t.Error("TestSampleVectors ForgedVector (alice modified) Passed")
 	}
 	alice[0]--
 
+	// todo check
 	aliceVRF[0]++
-	if pk.Verify(alice, aliceVRF, aliceProof) {
+	verifyResult, _ = pk.Verify(alice, aliceProof)
+	if verifyResult {
 		t.Error("TestSampleVectors ForgedVector (aliceVRF modified) Passed")
 	}
 	aliceVRF[0]--
 
 	aliceProof[0]++
-	if pk.Verify(alice, aliceVRF, aliceProof) {
+	verifyResult, _ = pk.Verify(alice, aliceProof)
+	if verifyResult {
 		t.Error("TestSampleVectors ForgedVector (aliceProof modified) Passed")
 	}
 	aliceProof[0]--
@@ -162,11 +170,10 @@ func BenchmarkVerify(b *testing.B) {
 		b.Fatal(err)
 	}
 	alice := []byte("alice")
-	aliceVRF := sk.Compute(alice)
 	_, aliceProof := sk.Prove(alice)
 	pk, _ := sk.Public()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		pk.Verify(alice, aliceVRF, aliceProof)
+		pk.Verify(alice, aliceProof)
 	}
 }
