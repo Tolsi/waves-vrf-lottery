@@ -52,28 +52,15 @@ func contains(s []int, e int) bool {
 	return false
 }
 
-func PickUniqueIndexes(seed []byte, pickN int, maxValue int32) []int {
+func PickUniquePseudorandomParticipants(seed []byte, pickN int, participants []string) []string {
+	winners := make([]string, len(participants))
 	seedNumber := new(big.Int)
 	seedNumber.SetBytes(seed)
 	s := rand.NewSource(seedNumber.Int64())
 	r := rand.New(s)
-	indixes := make([]int, 0)
-	for len(indixes) < pickN {
-		index := int(r.Int31n(maxValue))
-		if contains(indixes, index) {
-			continue
-		} else {
-			indixes = append(indixes, index)
-		}
-	}
-	return indixes
-}
-
-func PickUniqueParticipants(seed []byte, pickN int, participants []string) []string {
-	winners := make([]string, 0)
-	indexes := t.pickUniqueIndexes(seed, pickN, int32(len(participants)))
-	for value, _ := range indexes {
-		winners = append(winners, participants[value])
-	}
-	return winners
+	copy(winners, participants)
+	r.Shuffle(len(winners), func(i, j int) {
+		winners[i], winners[j] = winners[j], winners[i]
+	})
+	return winners[0:pickN]
 }
