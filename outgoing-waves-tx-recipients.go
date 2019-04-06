@@ -2,12 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	. "github.com/Tolsi/vrf-lottery/tools"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"strconv"
 )
 
 type Transaction struct {
@@ -46,10 +46,35 @@ func GetAddressRecipients(address string, assetId string, fromTs int64) ([]strin
 }
 
 func main() {
-	fromTs, err := strconv.ParseInt(os.Args[3], 10, 64)
-	PrintErrorAndExit(err)
-	recipients, err := GetAddressRecipients(os.Args[1], os.Args[2], fromTs)
+	//region Read params
+
+	senderAddress := *flag.String("senderAddress", "", "Sender address for filter the outcome transactions")
+	tokenId := *flag.String("tokenId", "", "Token id for filter the outcome transactions")
+
+	if senderAddress == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	if tokenId == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	//endregion
+
+	//region Load recipients of sended txs
+
+	fromTs := flag.Int64("fromTs", 0, "Filter transaction from timestamp in millis")
+	recipients, err := GetAddressRecipients(senderAddress, tokenId, *fromTs)
 	PrintErrorAndExit(err)
 	res, _ := json.Marshal(recipients)
+
+	//endregion
+
+	//region Result output
+
 	fmt.Printf("%s\n", res)
+
+	//endregion
 }

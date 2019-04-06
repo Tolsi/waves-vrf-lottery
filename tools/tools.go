@@ -43,16 +43,7 @@ func GetBlockSignature(blockNumber uint) (string, error) {
 	return "", errors.New("wrong type")
 }
 
-func contains(s []int, e int) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
-
-func PickUniquePseudorandomParticipants(seed []byte, pickN int, participants []string) []string {
+func PickUniquePseudorandomParticipants(seed []byte, pickN uint, participants []string) []string {
 	winners := make([]string, len(participants))
 	seedNumber := new(big.Int)
 	seedNumber.SetBytes(seed)

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/deckarep/golang-set"
 	"golang.org/x/net/websocket"
@@ -79,6 +80,12 @@ func receiveMessage(ws *websocket.Conn) string {
 }
 
 func main() {
+	tweetId := *flag.Uint("tweetId", 1, "The tweet id for load its retweeters")
+	if tweetId == 0 {
+		flag.Usage()
+		os.Exit(1)
+	}
+
 	session := createSession()
 	config, _ := websocket.NewConfig(fmt.Sprintf("wss://twren.ch/socket.io/?EIO=3&transport=websocket&sid=%s", session.Sid), "https://twren.ch")
 	config.TlsConfig = &tls.Config{
@@ -93,7 +100,7 @@ func main() {
 	// skip probe response
 	receiveMessage(ws)
 	sendMessage(ws, "5")
-	sendMessage(ws, fmt.Sprintf("42[\"loadRTs\",{\"id\":\"%s\"}]", os.Args[1]))
+	sendMessage(ws, fmt.Sprintf("42[\"loadRTs\",{\"id\":\"%d\"}]", tweetId))
 	var buffer bytes.Buffer
 	for {
 		var msg = receiveMessage(ws)

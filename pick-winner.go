@@ -3,38 +3,52 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"fmt"
 	. "github.com/Tolsi/vrf-lottery/tools"
 	"github.com/Tolsi/vrf-lottery/vrf"
 	"github.com/btcsuite/btcutil/base58"
 	"io/ioutil"
 	"os"
-	"strconv"
 )
 
 func main() {
 	//region Read params
 
-	participantsFile, err := ioutil.ReadFile(os.Args[1])
+	participantsFilename := *flag.String("participantsFile", "", "A path to file with participants. It should contains json array of strings")
+	blockHeight := *flag.Uint("blockHeight", 0, "A waves block height, the signature of it will be used in provable message")
+	privateKeyBase58 := *flag.String("privateKey", "", "A ed25519 private key in Base58 to prove the message")
+	pickN := *flag.Uint("pickN", 1, "The number of winners to pick, it should be >= 1")
+
+	if participantsFilename == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+	if blockHeight == 0 {
+		flag.Usage()
+		os.Exit(1)
+	}
+	if privateKeyBase58 == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+	if pickN < 1 {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	participantsFile, err := ioutil.ReadFile(participantsFilename)
 	PrintErrorAndExit(err)
 	var participants []string
 	err = json.Unmarshal(participantsFile, &participants)
 	PrintErrorAndExit(err)
-
-	blockHeight, err := strconv.ParseInt(os.Args[2], 10, 64)
-	PrintErrorAndExit(err)
-
-	skb := vrf.PrivateKey(base58.Decode(os.Args[3]))
-	PrintErrorAndExit(err)
-
-	pickN, err := strconv.ParseInt(os.Args[4], 10, 64)
-	PrintErrorAndExit(err)
+	skb := vrf.PrivateKey(base58.Decode(privateKeyBase58))
 
 	//endregion
 
 	//region Create proofs
 
-	blockSignature, err := GetBlockSignature(uint(blockHeight))
+	blockSignature, err := GetBlockSignature(blockHeight)
 	PrintErrorAndExit(err)
 
 	participantsJson, err := json.Marshal(participants)

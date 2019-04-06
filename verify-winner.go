@@ -2,38 +2,57 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	. "github.com/Tolsi/vrf-lottery/tools"
 	"github.com/Tolsi/vrf-lottery/vrf"
 	"github.com/btcsuite/btcutil/base58"
 	"io/ioutil"
 	"os"
-	"strconv"
 	"strings"
 )
 
 func main() {
 	//region Read params
 
-	participantsAndBlockSignature, err := ioutil.ReadFile(os.Args[1])
+	participantsFilename := *flag.String("participantsFile", "", "A path to file to validate. It should contains 2 lines: json array of the participants and a block signature")
+	blockHeight := *flag.Uint("blockHeight", 0, "A waves block height, the signature of it will be used to validate the data")
+	proofBase58 := *flag.String("proof", "", "A proof to validate the message")
+	publicKeyBase58 := *flag.String("publicKey", "", "A ed25519 public key in Base58 to validate the message")
+	pickN := *flag.Uint("pickN", 1, "The number of winners to pick, it should be >= 1")
+
+	if participantsFilename == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+	if blockHeight == 0 {
+		flag.Usage()
+		os.Exit(1)
+	}
+	if proofBase58 == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+	if publicKeyBase58 == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+	if pickN < 1 {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	participantsAndBlockSignature, err := ioutil.ReadFile(participantsFilename)
 	PrintErrorAndExit(err)
 	s := strings.Split(string(participantsAndBlockSignature), "\n")
 	var participants []string
 	err = json.Unmarshal([]byte(s[0]), &participants)
 	PrintErrorAndExit(err)
 	blockSignature := s[1]
-	PrintErrorAndExit(err)
 
-	blockHeight, err := strconv.ParseInt(os.Args[2], 10, 64)
-	PrintErrorAndExit(err)
+	proofBytes := base58.Decode(proofBase58)
 
-	proofString := os.Args[3]
-	proofBytes := base58.Decode(proofString)
-
-	pkb := vrf.PublicKey(base58.Decode(os.Args[4]))
-	PrintErrorAndExit(err)
-
-	pickN, err := strconv.ParseInt(os.Args[5], 10, 64)
+	pkb := vrf.PublicKey(base58.Decode(publicKeyBase58))
 	PrintErrorAndExit(err)
 
 	//endregion
@@ -61,7 +80,7 @@ func main() {
 	winners := PickUniquePseudorandomParticipants(vrfBytes[:], int(pickN), participants)
 
 	fmt.Printf("message: %s\n", string(participantsAndBlockSignature))
-	fmt.Printf("proof (base58): %s\n", proofString)
+	fmt.Printf("proof (base58): %s\n", proofBase58)
 	fmt.Printf("vrf bytes (base58): %s\n", base58.Encode(vrfBytes))
 	fmt.Printf("winners are participants: %v\n", winners)
 
