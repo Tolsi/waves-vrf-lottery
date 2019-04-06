@@ -81,6 +81,9 @@ func receiveMessage(ws *websocket.Conn) string {
 
 func main() {
 	tweetId := *flag.Uint("tweetId", 1, "The tweet id for load its retweeters")
+
+	flag.Parse()
+
 	if tweetId == 0 {
 		flag.Usage()
 		os.Exit(1)

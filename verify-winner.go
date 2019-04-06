@@ -21,6 +21,8 @@ func main() {
 	publicKeyBase58 := *flag.String("publicKey", "", "A ed25519 public key in Base58 to validate the message")
 	pickN := *flag.Uint("pickN", 1, "The number of winners to pick, it should be >= 1")
 
+	flag.Parse()
+
 	if participantsFilename == "" {
 		flag.Usage()
 		os.Exit(1)

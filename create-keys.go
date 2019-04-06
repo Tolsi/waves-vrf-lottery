@@ -20,6 +20,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	flag.Parse()
+
 	//endregion
 
 	//region Create keys

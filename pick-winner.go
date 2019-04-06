@@ -20,6 +20,8 @@ func main() {
 	privateKeyBase58 := *flag.String("privateKey", "", "A ed25519 private key in Base58 to prove the message")
 	pickN := *flag.Uint("pickN", 1, "The number of winners to pick, it should be >= 1")
 
+	flag.Parse()
+
 	if participantsFilename == "" {
 		flag.Usage()
 		os.Exit(1)

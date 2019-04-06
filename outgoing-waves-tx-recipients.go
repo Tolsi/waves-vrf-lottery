@@ -50,6 +50,9 @@ func main() {
 
 	senderAddress := *flag.String("senderAddress", "", "Sender address for filter the outcome transactions")
 	tokenId := *flag.String("tokenId", "", "Token id for filter the outcome transactions")
+	fromTs := *flag.Int64("fromTs", 0, "Filter transaction from timestamp in millis")
+
+	flag.Parse()
 
 	if senderAddress == "" {
 		flag.Usage()
@@ -65,8 +68,7 @@ func main() {
 
 	//region Load recipients of sended txs
 
-	fromTs := flag.Int64("fromTs", 0, "Filter transaction from timestamp in millis")
-	recipients, err := GetAddressRecipients(senderAddress, tokenId, *fromTs)
+	recipients, err := GetAddressRecipients(senderAddress, tokenId, fromTs)
 	PrintErrorAndExit(err)
 	res, _ := json.Marshal(recipients)
 
