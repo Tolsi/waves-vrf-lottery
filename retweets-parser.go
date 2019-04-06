@@ -80,11 +80,11 @@ func receiveMessage(ws *websocket.Conn) string {
 }
 
 func main() {
-	tweetId := *flag.Uint("tweetId", 1, "The tweet id for load its retweeters")
+	tweetId := flag.Uint("tweetId", 0, "Tweet id for load its retweeters")
 
 	flag.Parse()
 
-	if tweetId == 0 {
+	if *tweetId == 0 {
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -103,7 +103,7 @@ func main() {
 	// skip probe response
 	receiveMessage(ws)
 	sendMessage(ws, "5")
-	sendMessage(ws, fmt.Sprintf("42[\"loadRTs\",{\"id\":\"%d\"}]", tweetId))
+	sendMessage(ws, fmt.Sprintf("42[\"loadRTs\",{\"id\":\"%d\"}]", *tweetId))
 	var buffer bytes.Buffer
 	for {
 		var msg = receiveMessage(ws)

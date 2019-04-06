@@ -48,18 +48,18 @@ func GetAddressRecipients(address string, assetId string, fromTs int64) ([]strin
 func main() {
 	//region Read params
 
-	senderAddress := *flag.String("senderAddress", "", "Sender address for filter the outcome transactions")
-	tokenId := *flag.String("tokenId", "", "Token id for filter the outcome transactions")
-	fromTs := *flag.Int64("fromTs", 0, "Filter transaction from timestamp in millis")
+	senderAddress := flag.String("senderAddress", "", "Sender address for filter the outcome transactions")
+	tokenId := flag.String("tokenId", "", "Token id for filter the outcome transactions")
+	fromTs := flag.Int64("fromTs", 0, "Filter transaction from timestamp in millis, optional")
 
 	flag.Parse()
 
-	if senderAddress == "" {
+	if *senderAddress == "" {
 		flag.Usage()
 		os.Exit(1)
 	}
 
-	if tokenId == "" {
+	if *tokenId == "" {
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -68,7 +68,7 @@ func main() {
 
 	//region Load recipients of sended txs
 
-	recipients, err := GetAddressRecipients(senderAddress, tokenId, fromTs)
+	recipients, err := GetAddressRecipients(*senderAddress, *tokenId, *fromTs)
 	PrintErrorAndExit(err)
 	res, _ := json.Marshal(recipients)
 
