@@ -38,7 +38,7 @@ func GetAddressRecipients(address string, assetId string, fromTs int64) ([]strin
 	}
 	var recipients = make([]string, 0)
 	for _, tx := range txs[0] {
-		if tx.Type == 4 && tx.Sender == address && tx.Timestamp > fromTs {
+		if tx.Type == 4 && tx.Sender == address && tx.AssetId == assetId && tx.Timestamp > fromTs {
 			recipients = append(recipients, tx.Recipient)
 		}
 	}
