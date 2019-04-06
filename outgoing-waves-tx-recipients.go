@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Tolsi/vrf-lottery/tools"
+	. "github.com/Tolsi/vrf-lottery/tools"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -47,9 +47,9 @@ func GetAddressRecipients(address string, assetId string, fromTs int64) ([]strin
 
 func main() {
 	fromTs, err := strconv.ParseInt(os.Args[3], 10, 64)
-	tools.PrintErrorAndExit(err)
+	PrintErrorAndExit(err)
 	recipients, err := GetAddressRecipients(os.Args[1], os.Args[2], fromTs)
-	tools.PrintErrorAndExit(err)
+	PrintErrorAndExit(err)
 	res, _ := json.Marshal(recipients)
 	fmt.Printf("%s\n", res)
 }

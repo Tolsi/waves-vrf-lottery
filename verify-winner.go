@@ -3,11 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Tolsi/vrf-lottery/tools"
+	. "github.com/Tolsi/vrf-lottery/tools"
 	"github.com/Tolsi/vrf-lottery/vrf"
 	"github.com/btcsuite/btcutil/base58"
 	"io/ioutil"
-	"math/big"
 	"os"
 	"strconv"
 	"strings"
@@ -17,29 +16,32 @@ func main() {
 	//region Read params
 
 	participantsAndBlockSignature, err := ioutil.ReadFile(os.Args[1])
-	tools.PrintErrorAndExit(err)
+	PrintErrorAndExit(err)
 	s := strings.Split(string(participantsAndBlockSignature), "\n")
 	var participants []string
 	err = json.Unmarshal([]byte(s[0]), &participants)
-	tools.PrintErrorAndExit(err)
+	PrintErrorAndExit(err)
 	blockSignature := s[1]
-	tools.PrintErrorAndExit(err)
+	PrintErrorAndExit(err)
 
 	blockHeight, err := strconv.ParseInt(os.Args[2], 10, 64)
-	tools.PrintErrorAndExit(err)
+	PrintErrorAndExit(err)
 
 	proofString := os.Args[3]
 	proofBytes := base58.Decode(proofString)
 
 	pkb := vrf.PublicKey(base58.Decode(os.Args[4]))
-	tools.PrintErrorAndExit(err)
+	PrintErrorAndExit(err)
+
+	pickN, err := strconv.ParseInt(os.Args[5], 10, 64)
+	PrintErrorAndExit(err)
 
 	//endregion
 
 	//region Create proofs
 
-	loadedBlockSignature, err := tools.GetBlockSignature(uint(blockHeight))
-	tools.PrintErrorAndExit(err)
+	loadedBlockSignature, err := GetBlockSignature(uint(blockHeight))
+	PrintErrorAndExit(err)
 
 	if loadedBlockSignature != blockSignature {
 		fmt.Printf("Provable file contains different block signature at height %d: expected '%s', got '%s'\n", blockHeight, loadedBlockSignature, blockSignature)
@@ -56,20 +58,12 @@ func main() {
 
 	//region Result output
 
-	vrfNumber := new(big.Int)
-	vrfNumber.SetBytes(vrfBytes)
-
-	moduloBigint := big.NewInt(int64(len(participants)))
-	moduloResult := new(big.Int).Mod(vrfNumber, moduloBigint)
-
-	winner := participants[moduloResult.Int64()]
+	winners := PickUniquePseudorandomParticipants(vrfBytes[:], int(pickN), participants)
 
 	fmt.Printf("message: %s\n", string(participantsAndBlockSignature))
 	fmt.Printf("proof (base58): %s\n", proofString)
 	fmt.Printf("vrf bytes (base58): %s\n", base58.Encode(vrfBytes))
-	fmt.Printf("vrf as number: %d\n", vrfNumber)
-	fmt.Printf("modulo: %d\n", moduloResult)
-	fmt.Printf("winner is participant #%d: %s\n", moduloResult, winner)
+	fmt.Printf("winners are participants: %v\n", winners)
 
 	//endregion
 }
