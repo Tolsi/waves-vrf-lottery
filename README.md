@@ -22,7 +22,7 @@ Only the miner of the block in the future may in theory know his signature in ad
 
 # Description
 
-The package contains convenient console apps to create keys, load the participants lists, select the winners and check the winners.
+The package contains convenient console apps to create keys, calculate waves height at time and a time from the waves height, load the participants lists (from twitter or waves token recipients), select the winners and check the winners.
 
 Also there're 5 useful native applications:
 
@@ -34,6 +34,16 @@ $ ./create-keys -h
       	A base58 seed phrase used to generate keys, optional
     -json bool
         Output JSON, not plain text
+```
+
+App `waves-height-tools`
+```
+$ ./waves-height-tools -h
+Usage of ./waves-height-tools:
+  -at string
+    	Calculate height at datetime
+  -block int
+    	Calculate datetime by height
 ```
 
 App `pick-winner`
