@@ -14,15 +14,15 @@ Download the appropriate file for your platform from the Releases section (windo
 
 To start the lottery, you need to create a public and private keys, select the height of the Waves block in the future, the signature of which will participate in the lottery.
 In addition to the conditions for participation in the draw, you need to publicly declare the public key and the height that participants will use in the future for verification.
-At the time of summing up the results, the lottery organizer creates a list of participants, adds the block signature at a pre-selected height (saves it as a 'provable file'), selects the winner and creates a 'proof' bytes strings).
-When announcing the results, the organizer publishes the 'provable file' (list of participants and the block signature) and 'proof'. Using the public key published at the beginning of the lottery, 'provable file' and 'proof', anyone can check the winner, the presence of himself in the list of participants and the impartiality of the organizer.
+At the time of summing up the results, the lottery organizer creates a list of participants, adds the block signature at a pre-selected height (saves it as a 'provable file'), selects the winners and creates a 'proof' bytes strings).
+When announcing the results, the organizer publishes the 'provable file' (list of participants and the block signature) and 'proof'. Using the public key published at the beginning of the lottery, 'provable file' and 'proof', anyone can check the winners, the presence of himself in the list of participants and the impartiality of the organizer.
 
 Since the lottery organizer cannot predict the block signature in the future, he cannot know in advance the pseudo-random value that will be involved in the lottery.
-Only the miner of the block in the future may in theory know his signature in advance, but he does not have the private key of the lottery organizer to manipulate it to win the contest, so he does not know how the signature affects the winner.
+Only the miner of the block in the future may in theory know his signature in advance, but he does not have the private key of the lottery organizer to manipulate it to win the contest, so he does not know how the signature affects the winners.
 
 # Description
 
-The package contains convenient console apps to create keys, load the participants lists, select the winner and check the winner.
+The package contains convenient console apps to create keys, load the participants lists, select the winners and check the winners.
 
 Also there're 5 useful native applications:
 
