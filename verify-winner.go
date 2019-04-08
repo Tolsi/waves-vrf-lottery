@@ -83,6 +83,13 @@ func main() {
 	winners := PickUniquePseudorandomParticipants(vrfBytes[:], *pickN, participants)
 
 	if *printJson {
+		type OutputWinners struct {
+			Winners []string
+			Proof   string
+			Vrf     string
+			Message string
+		}
+
 		err = json.NewEncoder(os.Stdout).Encode(OutputWinners{winners, *proofBase58, base58.Encode(vrfBytes), string(participantsAndBlockSignature)})
 		PrintErrorAndExit(err)
 	} else {

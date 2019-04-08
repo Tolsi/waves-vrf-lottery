@@ -12,13 +12,6 @@ import (
 	"os"
 )
 
-type OutputWinners struct {
-	Winners []string
-	Proof   string
-	Vrf     string
-	Message string
-}
-
 func main() {
 	//region Read params
 
@@ -85,6 +78,12 @@ func main() {
 	winners := PickUniquePseudorandomParticipants(vrfBytes[:], *pickN, participants)
 
 	if *printJson {
+		type OutputWinners struct {
+			Winners []string
+			Proof   string
+			Vrf     string
+			Message string
+		}
 		err = json.NewEncoder(os.Stdout).Encode(OutputWinners{winners, base58.Encode(proof), base58.Encode(vrfBytes), string(provableMessage)})
 		PrintErrorAndExit(err)
 	} else {
