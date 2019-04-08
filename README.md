@@ -2,9 +2,9 @@
 
 This application uses [VRF](https://github.com/coniks-sys/coniks-go/blob/master/crypto/vrf/vrf.go) to confirm the randomness of various online lotteries.
  
-The unique provable random index created during the VRF scheme is used to select the winner. 
-The winner index is calculated as the remainder of dividing this index by the total number of participants.
-Now only tweeter support is made, but you can add any source of participants of the lottery in the future.
+The unique provable random index created during the VRF scheme is used to select the winners. 
+The list of participants is shuffled using [the Fisher–Yates shuffle algorithm](https://github.com/golang/go/blob/release-branch.go1.12/src/math/rand/rand.go#L232) and N first winners are selected.
+Now the tweeter and waves asset recipients support are made, but you can add any source of participants of the lottery in the future. The applications use an array of strings as a list of participants.
 
 # Installation
 
