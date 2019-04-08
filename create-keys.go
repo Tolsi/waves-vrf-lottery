@@ -4,17 +4,26 @@ import (
 	"bytes"
 	"crypto/rand"
 	"crypto/sha512"
+	"encoding/json"
 	"flag"
 	"fmt"
 	. "github.com/Tolsi/vrf-lottery/tools"
 	"github.com/Tolsi/vrf-lottery/vrf"
 	"github.com/btcsuite/btcutil/base58"
+	"os"
 )
+
+type OutputKeys struct {
+	Seed       string
+	PrivateKey string
+	PublicKey  string
+}
 
 func main() {
 	//region Read params
 
 	seed := flag.String("seed", "", "A base58 seed phrase used to generate keys, optional")
+	printJson := flag.Bool("json", false, "Output JSON, not plain text")
 
 	flag.Parse()
 
@@ -45,9 +54,14 @@ func main() {
 
 	//region Result output
 
-	fmt.Printf("Seed: %s\n", *seed)
-	fmt.Printf("Private key: %s\n", base58.Encode(private))
-	fmt.Printf("Public key: %s\n", base58.Encode(public))
+	if *printJson {
+		err = json.NewEncoder(os.Stdout).Encode(OutputKeys{*seed, base58.Encode(private), base58.Encode(public)})
+		PrintErrorAndExit(err)
+	} else {
+		fmt.Printf("Seed: %s\n", *seed)
+		fmt.Printf("Private key: %s\n", base58.Encode(private))
+		fmt.Printf("Public key: %s\n", base58.Encode(public))
+	}
 
 	//endregion
 }

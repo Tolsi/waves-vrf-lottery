@@ -12,6 +12,13 @@ import (
 	"os"
 )
 
+type OutputWinners struct {
+	Winners []string
+	Proof   string
+	Vrf     string
+	Message string
+}
+
 func main() {
 	//region Read params
 
@@ -19,6 +26,7 @@ func main() {
 	blockHeight := flag.Uint("blockHeight", 0, "Waves block height, the signature of it will be used in provable message")
 	privateKeyBase58 := flag.String("privateKey", "", "ed25519 private key in Base58 to prove the message")
 	pickN := flag.Uint("pickN", 1, "Number of winners to pick, it should be >= 1")
+	printJson := flag.Bool("json", false, "Output JSON, not plain text")
 
 	flag.Parse()
 
@@ -76,10 +84,15 @@ func main() {
 
 	winners := PickUniquePseudorandomParticipants(vrfBytes[:], *pickN, participants)
 
-	fmt.Printf("message: %s\n", string(provableMessage))
-	fmt.Printf("proof (base58): %s\n", base58.Encode(proof))
-	fmt.Printf("vrf bytes (base58): %s\n", base58.Encode(vrfBytes))
-	fmt.Printf("winners are participants: %v\n", winners)
+	if *printJson {
+		err = json.NewEncoder(os.Stdout).Encode(OutputWinners{winners, base58.Encode(proof), base58.Encode(vrfBytes), string(provableMessage)})
+		PrintErrorAndExit(err)
+	} else {
+		fmt.Printf("message: %s\n", string(provableMessage))
+		fmt.Printf("proof (base58): %s\n", base58.Encode(proof))
+		fmt.Printf("vrf bytes (base58): %s\n", base58.Encode(vrfBytes))
+		fmt.Printf("winners are participants: %v\n", winners)
+	}
 
 	//endregion
 }

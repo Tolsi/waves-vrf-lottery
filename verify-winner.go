@@ -20,6 +20,7 @@ func main() {
 	proofBase58 := flag.String("proof", "", "Proof bytes in Base58 to validate the message")
 	publicKeyBase58 := flag.String("publicKey", "", "ed25519 public key in Base58 to validate the message")
 	pickN := flag.Uint("pickN", 1, "Number of winners to pick, it should be >= 1")
+	printJson := flag.Bool("json", false, "Output JSON, not plain text")
 
 	flag.Parse()
 
@@ -81,10 +82,15 @@ func main() {
 
 	winners := PickUniquePseudorandomParticipants(vrfBytes[:], *pickN, participants)
 
-	fmt.Printf("message: %s\n", string(participantsAndBlockSignature))
-	fmt.Printf("proof (base58): %s\n", *proofBase58)
-	fmt.Printf("vrf bytes (base58): %s\n", base58.Encode(vrfBytes))
-	fmt.Printf("winners are participants: %v\n", winners)
+	if *printJson {
+		err = json.NewEncoder(os.Stdout).Encode(OutputWinners{winners, *proofBase58, base58.Encode(vrfBytes), string(participantsAndBlockSignature)})
+		PrintErrorAndExit(err)
+	} else {
+		fmt.Printf("message: %s\n", string(participantsAndBlockSignature))
+		fmt.Printf("proof (base58): %s\n", *proofBase58)
+		fmt.Printf("vrf bytes (base58): %s\n", base58.Encode(vrfBytes))
+		fmt.Printf("winners are participants: %v\n", winners)
+	}
 
 	//endregion
 }
