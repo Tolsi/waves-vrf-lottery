@@ -14,9 +14,9 @@ import (
 )
 
 type OutputKeys struct {
-	Seed       string
-	PrivateKey string
-	PublicKey  string
+	Seed       string `json:"seed"`
+	PrivateKey string `json:"private_key"`
+	PublicKey  string `json:"public_key"`
 }
 
 func main() {

@@ -79,10 +79,10 @@ func main() {
 
 	if *printJson {
 		type OutputWinners struct {
-			Winners []string
-			Proof   string
-			Vrf     string
-			Message string
+			Winners []string `json:"winners"`
+			Proof   string   `json:"proof"`
+			Vrf     string   `json:"vrf"`
+			Message string   `json:"message"`
 		}
 		err = json.NewEncoder(os.Stdout).Encode(OutputWinners{winners, base58.Encode(proof), base58.Encode(vrfBytes), string(provableMessage)})
 		PrintErrorAndExit(err)
