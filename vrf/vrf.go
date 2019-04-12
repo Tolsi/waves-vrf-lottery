@@ -30,11 +30,10 @@ import (
 )
 
 const (
-	PublicKeySize    = 32
-	PrivateKeySize   = 64
-	Size             = 32
-	intermediateSize = 32
-	ProofSize        = 32 + 32 + intermediateSize
+	PublicKeySize  = 32
+	PrivateKeySize = 64
+	Size           = 32
+	ProofSize      = 32 + 32
 )
 
 var (
@@ -118,7 +117,7 @@ func hashToCurve(m []byte) *edwards25519.ExtendedGroupElement {
 // Verify(m, vrf, proof) == true. The vrf value is the
 // same as returned by Compute(m).
 func (sk PrivateKey) Prove(m []byte) (vrf, proof []byte) {
-	x, skhr := sk.expandSecret()
+	x, _ := sk.expandSecret()
 	var sH, rH [64]byte
 	var r, s, minusS, t, gB, grB, hrB, hxB, hB [32]byte
 	var ii, gr, hr edwards25519.ExtendedGroupElement
@@ -128,9 +127,10 @@ func (sk PrivateKey) Prove(m []byte) (vrf, proof []byte) {
 	edwards25519.GeScalarMult(&ii, x, h)
 	ii.ToBytes(&hxB)
 
-	// use hash of private-, public-key and msg as randomness source:
+	// use hash of public-key and msg as randomness source:
 	hash := sha3.NewShake256()
-	hash.Write(skhr[:])
+	//don't use the private key in the random for make this validatable
+	//hash.Write(skhr[:])
 	hash.Write(sk[32:]) // public key, as in ed25519
 	hash.Write(m)
 	hash.Read(rH[:])
@@ -161,7 +161,6 @@ func (sk PrivateKey) Prove(m []byte) (vrf, proof []byte) {
 	proof = make([]byte, ProofSize)
 	copy(proof[:32], s[:])
 	copy(proof[32:64], t[:])
-	copy(proof[64:96], hxB[:])
 
 	hash.Write(hxB[:])
 	hash.Write(m)
@@ -176,14 +175,13 @@ func (pkBytes PublicKey) Verify(m, proof []byte) (bool, []byte) {
 	if len(proof) != ProofSize || len(pkBytes) != PublicKeySize {
 		return false, nil
 	}
-	var pk, s, sRef, t, hxB, hB, gB, ABytes, BBytes [32]byte
+	var pk, s, sRef, t, hB, gB, ABytes, BBytes [32]byte
 	copy(pk[:], pkBytes[:])
 	copy(s[:32], proof[:32])
 	copy(t[:32], proof[32:64])
-	copy(hxB[:], proof[64:96])
 
 	hash := sha3.NewShake256()
-	hash.Write(hxB[:]) // const length
+	hash.Write(pkBytes[:]) // const length
 	hash.Write(m)
 	var hCheck [Size]byte
 	hash.Read(hCheck[:])
@@ -194,7 +192,7 @@ func (pkBytes PublicKey) Verify(m, proof []byte) (bool, []byte) {
 	if !P.FromBytesBaseGroup(&pk) {
 		return false, nil
 	}
-	if !ii.FromBytesBaseGroup(&hxB) {
+	if !ii.FromBytesBaseGroup(&hCheck) {
 		return false, nil
 	}
 	edwards25519.GeDoubleScalarMultVartime(&A, &s, &P, &t)
@@ -215,7 +213,7 @@ func (pkBytes PublicKey) Verify(m, proof []byte) (bool, []byte) {
 	hash.Write(gB[:])
 	hash.Write(hB[:])
 	hash.Write(pkBytes)
-	hash.Write(hxB[:])
+	hash.Write(hCheck[:])
 	hash.Write(ABytes[:]) // const length (g^t*G^s)
 	hash.Write(BBytes[:]) // const length (H1(m)^t*v^s)
 	hash.Write(m)
