@@ -51,6 +51,7 @@ func main() {
 
 	//region Create proofs
 
+	// todo use generation signature in the next version
 	blockSignature, err := GetBlockSignature(*blockHeight)
 	PrintErrorAndExit(err)
 
