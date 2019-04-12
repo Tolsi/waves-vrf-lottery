@@ -118,7 +118,7 @@ func hashToCurve(m []byte) *edwards25519.ExtendedGroupElement {
 // Verify(m, vrf, proof) == true. The vrf value is the
 // same as returned by Compute(m).
 func (sk PrivateKey) Prove(m []byte) (vrf, proof []byte) {
-	x, skhr := sk.expandSecret()
+	x, _ := sk.expandSecret()
 	var sH, rH [64]byte
 	var r, s, minusS, t, gB, grB, hrB, hxB, hB [32]byte
 	var ii, gr, hr edwards25519.ExtendedGroupElement
@@ -128,9 +128,10 @@ func (sk PrivateKey) Prove(m []byte) (vrf, proof []byte) {
 	edwards25519.GeScalarMult(&ii, x, h)
 	ii.ToBytes(&hxB)
 
-	// use hash of private-, public-key and msg as randomness source:
+	// use hash of public-key and msg as randomness source:
 	hash := sha3.NewShake256()
-	hash.Write(skhr[:])
+	//don't use the private key in the random for make this validatable
+	//hash.Write(skhr[:])
 	hash.Write(sk[32:]) // public key, as in ed25519
 	hash.Write(m)
 	hash.Read(rH[:])
