@@ -20,6 +20,11 @@ When announcing the results, the organizer publishes the 'provable file' (list o
 Since the lottery organizer cannot predict the block signature in the future, he cannot know in advance the pseudo-random value that will be involved in the lottery.
 Only the miner of the block in the future may in theory know his signature in advance, but he does not have the private key of the lottery organizer to manipulate it to win the contest, so he does not know how the signature affects the winners.
 
+## Attention! Disposable Keys
+
+When disclosing a confirmation to verify the entire calculation process [(in particular, used random when creating evidence)](https://github.com/Tolsi/vrf-lottery/commit/42b60c9af78ce041816d9441b1cd831c3bcd89b2#diff-8277bc49a773687a59dd8a9d4b92db74R133), it becomes possible to obtain a private key from the proof, provable message and the public key. 
+Consequently, one pair of keys should be used only in one draw, otherwise the attacker can use the private key to falsify results with valid evidence and mislead participants.
+
 # Description
 
 The package contains convenient console apps to create keys, calculate waves height at time and a time from the waves height, load the participants lists (from twitter or waves token recipients), select the winners and check the winners.
