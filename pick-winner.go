@@ -10,6 +10,7 @@ import (
 	"github.com/btcsuite/btcutil/base58"
 	"io/ioutil"
 	"os"
+	"sort"
 )
 
 func main() {
@@ -55,6 +56,7 @@ func main() {
 	blockSignature, err := GetBlockSignature(*blockHeight)
 	PrintErrorAndExit(err)
 
+	sort.Strings(participants)
 	participantsJson, err := json.Marshal(participants)
 	PrintErrorAndExit(err)
 	provableMessage := append(participantsJson, []byte("\n"+blockSignature)...)

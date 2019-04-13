@@ -9,8 +9,22 @@ import (
 	"github.com/btcsuite/btcutil/base58"
 	"io/ioutil"
 	"os"
+	"reflect"
+	"sort"
 	"strings"
 )
+
+func compare(a, b []string) []string {
+	for i := len(a) - 1; i >= 0; i-- {
+		for _, vD := range b {
+			if a[i] == vD {
+				a = append(a[:i], a[i+1:]...)
+				break
+			}
+		}
+	}
+	return a
+}
 
 func main() {
 	//region Read params
@@ -51,7 +65,14 @@ func main() {
 	var participants []string
 	err = json.Unmarshal([]byte(s[0]), &participants)
 	PrintErrorAndExit(err)
+	sortedParticipants := make([]string, len(participants))
+	copy(sortedParticipants, participants)
+	sort.Strings(sortedParticipants)
 	blockSignature := s[1]
+	if !reflect.DeepEqual(participants, sortedParticipants) {
+		fmt.Printf("Participants list should be sorted \n")
+		os.Exit(1)
+	}
 
 	proofBytes := base58.Decode(*proofBase58)
 
