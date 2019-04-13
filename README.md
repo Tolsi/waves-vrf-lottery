@@ -8,7 +8,7 @@ Now the tweeter and waves asset recipients support are made, but you can add any
 
 # Installation
 
-Download the appropriate file for your platform from the Releases section (windows, mac os linux).
+Download the appropriate file for your platform from the Releases section (windows, mac os or linux).
 
 # Scheme of the lottery
 
