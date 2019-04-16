@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -65,10 +64,14 @@ func main() {
 	fmt.Printf("Provable lottery data was saved to file '%s'\n", fileName)
 	PrintErrorAndExit(err)
 
-	vrfBytes, proof := skb.Prove(provableMessage)
-	pk, _ := skb.Public()
-	verifyResult, vrfBytes2 := pk.Verify(provableMessage, proof)
-	if !verifyResult || bytes.Compare(vrfBytes, vrfBytes2) != 0 {
+	proof, err := skb.CalculateVrfSignature(provableMessage)
+	if err != nil {
+		fmt.Printf("Proof verification was failed")
+		os.Exit(1)
+	}
+	pk, _ := skb.GeneratePublicKey()
+	vrfBytes, err := pk.VerifyVrfSignature(provableMessage, proof)
+	if err != nil {
 		fmt.Printf("Proof verification was failed")
 		os.Exit(1)
 	}

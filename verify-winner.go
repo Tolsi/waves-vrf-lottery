@@ -91,8 +91,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	verifyResult, vrfBytes := pkb.Verify(participantsAndBlockSignature, proofBytes)
-	if !verifyResult {
+	vrfBytes, err := vrf.VerifyVrfSignature(participantsAndBlockSignature, proofBytes)
+	if err != nil {
 		fmt.Printf("Proof verification was failed\n")
 		os.Exit(1)
 	}
