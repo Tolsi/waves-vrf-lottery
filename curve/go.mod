@@ -1,3 +1,3 @@
-module github.com/Lucus16/curve25519-go
+module github.com/Tolsi/vrf-lottery/curve
 
 go 1.12
