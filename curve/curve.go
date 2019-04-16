@@ -125,15 +125,9 @@ func (key PublicKey) VerifySignature(message []byte, signature []byte) (good boo
 	return result == 0, newCError("curve25519_verify", result)
 }
 
-func (key PrivateKey) CalculateVrfSignature(message []byte) (signature []byte, err error) {
+func (key PrivateKey) CalculateVrfSignature(message []byte, random_data []byte) (signature []byte, err error) {
 	if len(key) != djbKeyLen {
 		return nil, fmt.Errorf("Bad key length: %d", len(key))
-	}
-
-	var random_data [vrfSignatureLen]byte
-	_, err = rand.Read(random_data[:])
-	if err != nil {
-		return
 	}
 
 	signature = make([]byte, vrfSignatureLen)
