@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/Tolsi/vrf-lottery/curve"
 	. "github.com/Tolsi/vrf-lottery/tools"
-	"github.com/Tolsi/vrf-lottery/vrf"
 	"github.com/btcsuite/btcutil/base58"
 	"io/ioutil"
 	"os"
@@ -45,7 +45,7 @@ func main() {
 	var participants []string
 	err = json.Unmarshal(participantsFile, &participants)
 	PrintErrorAndExit(err)
-	skb := vrf.PrivateKey(base58.Decode(*privateKeyBase58))
+	skb := curve.PrivateKey(base58.Decode(*privateKeyBase58))
 
 	//endregion
 

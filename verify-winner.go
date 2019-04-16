@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/Tolsi/vrf-lottery/curve"
 	. "github.com/Tolsi/vrf-lottery/tools"
-	"github.com/Tolsi/vrf-lottery/vrf"
 	"github.com/btcsuite/btcutil/base58"
 	"io/ioutil"
 	"os"
@@ -76,7 +76,7 @@ func main() {
 
 	proofBytes := base58.Decode(*proofBase58)
 
-	pkb := vrf.PublicKey(base58.Decode(*publicKeyBase58))
+	pkb := curve.PublicKey(base58.Decode(*publicKeyBase58))
 	PrintErrorAndExit(err)
 
 	//endregion
@@ -91,7 +91,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	vrfBytes, err := vrf.VerifyVrfSignature(participantsAndBlockSignature, proofBytes)
+	vrfBytes, err := curve.VerifyVrfSignature(participantsAndBlockSignature, proofBytes)
 	if err != nil {
 		fmt.Printf("Proof verification was failed\n")
 		os.Exit(1)
