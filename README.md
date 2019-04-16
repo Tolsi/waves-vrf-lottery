@@ -22,7 +22,7 @@ Only the miner of the block in the future may in theory know his signature in ad
 
 ## Attention! Disposable Keys
 
-When disclosing a confirmation to verify the entire calculation process [(in particular, used random when creating evidence)](https://github.com/Tolsi/vrf-lottery/commit/42b60c9af78ce041816d9441b1cd831c3bcd89b2#diff-8277bc49a773687a59dd8a9d4b92db74R133), it becomes possible to obtain a private key from the proof, provable message and the public key. 
+When disclosing a confirmation to verify the entire calculation process [(in particular, used random when creating evidence)](https://github.com/Tolsi/vrf-lottery/commit/c733a3dd45af7d2a4b416d41151c77721ddcd22b), it becomes possible to obtain a private key from the proof, provable message and the public key. 
 Consequently, one pair of keys should be used only in one draw, otherwise the attacker can use the private key to falsify results with valid evidence and mislead participants.
 
 # Description
