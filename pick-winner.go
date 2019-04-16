@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -64,7 +65,8 @@ func main() {
 	fmt.Printf("Provable lottery data was saved to file '%s'\n", fileName)
 	PrintErrorAndExit(err)
 
-	proof, err := skb.CalculateVrfSignature(provableMessage)
+	messageHash := sha256.Sum256(provableMessage)
+	proof, err := skb.CalculateVrfSignature(provableMessage, messageHash[:])
 	if err != nil {
 		fmt.Printf("Proof verification was failed")
 		os.Exit(1)
