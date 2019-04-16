@@ -62,7 +62,9 @@ func main() {
 	provableMessage := append(participantsJson, []byte("\n"+blockSignature)...)
 	fileName := fmt.Sprintf("participants_and_%d_block_signature.txt", *blockHeight)
 	err = ioutil.WriteFile(fileName, provableMessage, 0644)
-	fmt.Printf("Provable lottery data was saved to file '%s'\n", fileName)
+	if !*printJson {
+		fmt.Printf("Provable lottery data was saved to file '%s'\n", fileName)
+	}
 	PrintErrorAndExit(err)
 
 	messageHash := sha256.Sum256(provableMessage)
