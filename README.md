@@ -1,6 +1,6 @@
 ## VRF Lottery
 
-This application uses [VRF](https://github.com/coniks-sys/coniks-go/blob/master/crypto/vrf/vrf.go) to confirm the randomness of various online lotteries.
+This application uses [VRF](https://github.com/Tolsi/vrf-lottery/blob/1bda5c2c6dede3cd2fd357682a9b04f72bc81037/curve/gen_veddsa.c#L82) to confirm the randomness of various online lotteries.
  
 The unique provable random index created during the VRF scheme is used to select the winners. 
 The list of participants is shuffled using [the Fisher–Yates shuffle algorithm](https://github.com/golang/go/blob/release-branch.go1.12/src/math/rand/rand.go#L232) and N first winners are selected.
@@ -12,7 +12,7 @@ Download the appropriate file for your platform from the Releases section (windo
 
 # Scheme of the lottery
 
-To start the lottery, you need to create a ed25519 public and private keys (you can use `create-keys` tool from this package), select the height of the Waves block in the future (you can use `waves-height-tools` tool from this package), the signature of which will participate in the lottery.
+To start the lottery, you need to create a curve25519 public and private keys (you can use `create-keys` tool from this package), select the height of the Waves block in the future (you can use `waves-height-tools` tool from this package), the signature of which will participate in the lottery.
 In addition to the conditions for participation in the draw, you need to publicly declare the public key and the height that participants will use in the future for verification.
 At the time of summing up the results, the lottery organizer creates a list of participants (you can use `outgoing-waves-tx-recipients` or `retweets-parser` tool from this package or create an array of participants manually), adds the block signature at a pre-selected height (saves it as a 'provable file'), selects the winners (using `pick-winner` tool from this package) and creates a 'proof' bytes strings).
 When announcing the results, the organizer publishes the 'provable file' (list of participants and the block signature) and 'proof'. Using the public key published at the beginning of the lottery, 'provable file' and 'proof', anyone can check the winners (using `verify-winner` tool from this package), the presence of himself in the list of participants and the impartiality of the organizer.
@@ -35,8 +35,6 @@ App `create-keys`
 ```
 $ ./create-keys -h
   Usage of ./create-keys:
-    -seed string
-      	A base58 seed phrase used to generate keys, optional
     -json bool
         Output JSON, not plain text
 ```
@@ -62,7 +60,7 @@ $ ./pick-winner -h
    -pickN uint
      	Number of winners to pick, it should be >= 1 (default 1)
    -privateKey string
-     	ed25519 private key in Base58 to prove the message
+     	curve25519 private key in Base58 to prove the message
    -json bool
         Output JSON, not plain text
 ```
@@ -80,7 +78,7 @@ Usage of ./verify-winner:
   -provableFile string
     	Path to file to validate, it should contains 2 lines: json array of the participants, '\n' line separator and a block signature
   -publicKey string
-    	ed25519 public key in Base58 to validate the message
+    	curve25519 public key in Base58 to validate the message
   -json bool
     	Output JSON, not plain text
 ```
