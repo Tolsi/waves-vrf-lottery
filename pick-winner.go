@@ -18,7 +18,7 @@ func main() {
 
 	participantsFilename := flag.String("participantsFile", "", "Path to file with participants, it should contains json array of strings")
 	blockHeight := flag.Uint("blockHeight", 0, "Waves block height, the signature of it will be used in provable message")
-	privateKeyBase58 := flag.String("privateKey", "", "ed25519 private key in Base58 to prove the message")
+	privateKeyBase58 := flag.String("privateKey", "", "curve25519 private key in Base58 to prove the message")
 	pickN := flag.Uint("pickN", 1, "Number of winners to pick, it should be >= 1")
 	printJson := flag.Bool("json", false, "Output JSON, not plain text")
 

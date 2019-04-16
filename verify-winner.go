@@ -32,7 +32,7 @@ func main() {
 	provableFilename := flag.String("provableFile", "", "Path to file to validate, it should contains 2 lines: json array of the participants, '\\n' line separator and a block signature")
 	blockHeight := flag.Uint("blockHeight", 0, "Waves block height, the signature of it will be used to validate the data")
 	proofBase58 := flag.String("proof", "", "Proof bytes in Base58 to validate the message")
-	publicKeyBase58 := flag.String("publicKey", "", "ed25519 public key in Base58 to validate the message")
+	publicKeyBase58 := flag.String("publicKey", "", "curve25519 public key in Base58 to validate the message")
 	pickN := flag.Uint("pickN", 1, "Number of winners to pick, it should be >= 1")
 	printJson := flag.Bool("json", false, "Output JSON, not plain text")
 
