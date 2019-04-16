@@ -12,7 +12,7 @@ Download the appropriate file for your platform from the Releases section (windo
 
 # Scheme of the lottery
 
-To start the lottery, you need to create a ed25519 public and private keys (you can use `create-keys` toolsi from this package), select the height of the Waves block in the future, the signature of which will participate in the lottery.
+To start the lottery, you need to create a ed25519 public and private keys (you can use `create-keys` tool from this package), select the height of the Waves block in the future, the signature of which will participate in the lottery.
 In addition to the conditions for participation in the draw, you need to publicly declare the public key and the height that participants will use in the future for verification.
 At the time of summing up the results, the lottery organizer creates a list of participants, adds the block signature at a pre-selected height (saves it as a 'provable file'), selects the winners and creates a 'proof' bytes strings).
 When announcing the results, the organizer publishes the 'provable file' (list of participants and the block signature) and 'proof'. Using the public key published at the beginning of the lottery, 'provable file' and 'proof', anyone can check the winners, the presence of himself in the list of participants and the impartiality of the organizer.
