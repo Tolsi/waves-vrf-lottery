@@ -3,7 +3,7 @@
 with pkgs;
 
 buildGoPackage {
-  name = "curve25519-go";
+  name = "curve";
   src = ./.;
   goPackagePath = "github.com/Tolsi/vrf-lottery/curve";
 }

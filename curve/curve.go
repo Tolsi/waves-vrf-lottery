@@ -1,7 +1,7 @@
 // Package curve is a thin wrapper around the libsignal curve25519
 // implementation. It aims to be the Go equivalent of
 // https://github.com/signalapp/curve25519-java
-package curve // import "github.com/Lucus16/curve25519-go"
+package curve // import "github.com/Tolsi/vrf-lottery/curve"
 
 import "crypto/rand"
 import "fmt"
