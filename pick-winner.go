@@ -68,7 +68,7 @@ func main() {
 	PrintErrorAndExit(err)
 
 	random := make([]byte, 32)
-	_, err := rand.Read(random)
+	_, err = rand.Read(random)
 	PrintErrorAndExit(err)
 	proof, err := skb.CalculateVrfSignature(provableMessage, random[:])
 	if err != nil {
