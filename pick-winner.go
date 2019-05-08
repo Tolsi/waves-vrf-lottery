@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"os"
 	"sort"
-	"rand"
+	"math/rand"
 )
 
 func main() {
