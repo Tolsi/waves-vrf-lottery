@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/sha256"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -11,6 +10,7 @@ import (
 	"io/ioutil"
 	"os"
 	"sort"
+	"rand"
 )
 
 func main() {
@@ -67,8 +67,10 @@ func main() {
 	}
 	PrintErrorAndExit(err)
 
-	messageHash := sha256.Sum256(provableMessage)
-	proof, err := skb.CalculateVrfSignature(provableMessage, messageHash[:])
+	random := make([]byte, 32)
+	_, err := rand.Read(random)
+	PrintErrorAndExit(err)
+	proof, err := skb.CalculateVrfSignature(provableMessage, random[:])
 	if err != nil {
 		fmt.Printf("Proof verification was failed")
 		os.Exit(1)
